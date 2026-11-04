@@ -4,6 +4,8 @@ import { WorldState } from '../../simulation/world/WorldState';
 import { Character } from '../../simulation/entities/Character';
 import { CausalityGateway } from '../../simulation/causality/CausalityGateway';
 import { GeminiBrainClient, IGeminiClient } from '../gemini/client';
+import { PerceptionSystem } from '../../simulation/perception/PerceptionSystem';
+import { DialogueSystem } from '../../simulation/dialogue/DialogueSystem';
 
 export interface DeliberationTelemetry {
   characterId: CharacterId;
@@ -129,24 +131,28 @@ export class AgentOrchestrator {
       { name: 'Wooden Pier', x: 17, y: 14 },
     ];
 
-    // Calculate nearest landmark
+    // Calculate nearest landmark and filter by PerceptionSystem.VISION_RADIUS (6 tiles)
     let nearestLandmark = 'Wild Grass';
     let minLandmarkDist = Infinity;
-    const visibleLandmarks = landmarks.map((l) => {
+    const visibleLandmarks: Array<{ name: string; x: number; y: number; distance: number }> = [];
+
+    for (const l of landmarks) {
       const dist = Math.hypot(l.x - character.tileX, l.y - character.tileY);
       if (dist < minLandmarkDist) {
         minLandmarkDist = dist;
         nearestLandmark = l.name;
       }
-      return { ...l, distance: dist };
-    });
+      if (dist <= PerceptionSystem.VISION_RADIUS) {
+        visibleLandmarks.push({ ...l, distance: dist });
+      }
+    }
 
-    // Nearby characters (excluding self) within vision radius of 8 tiles
+    // Nearby characters (excluding self) within bounded VISION_RADIUS (6 tiles)
     const nearbyCharacters: AgentPerceptionContext['nearbyCharacters'] = [];
     for (const [otherId, otherChar] of worldState.characters.entries()) {
       if (otherId === character.id) continue;
       const dist = Math.hypot(otherChar.tileX - character.tileX, otherChar.tileY - character.tileY);
-      if (dist <= 8) {
+      if (dist <= PerceptionSystem.VISION_RADIUS) {
         nearbyCharacters.push({
           name: otherChar.name,
           x: otherChar.tileX,
@@ -156,6 +162,17 @@ export class AgentOrchestrator {
         });
       }
     }
+
+    // Retrieve heard speech and social knowledge from dialogue system
+    const dialogueSystem = DialogueSystem.getInstance();
+    const heardSpeech = dialogueSystem.getHeardSpeech(character.id);
+    const knowledgeItems = dialogueSystem.getCharacterKnowledge(character.id);
+
+    const recentMemories: string[] = [
+      `Woke up near ${nearestLandmark} on Day ${clock.day}.`,
+      ...heardSpeech.slice(-2),
+      ...knowledgeItems.map((k) => `I know: ${k.subject} is ${k.object} (learned from ${k.source}).`),
+    ];
 
     return {
       characterId: character.id,
@@ -187,9 +204,7 @@ export class AgentOrchestrator {
       visibleLandmarks,
       nearbyCharacters,
       nearbyObjects: [],
-      recentMemories: [
-        `Woke up near ${nearestLandmark} on Day ${clock.day}.`,
-      ],
+      recentMemories,
       knownRecipes: ['wood_stick', 'stone_mortar'],
     };
   }
@@ -227,13 +242,8 @@ export class AgentOrchestrator {
       }
     } else if (action.type === 'SPEAK' && action.dialogue) {
       character.activity = 'speaking';
-      worldState.eventBus.emit('worldEvent', {
-        id: `dialogue-${Date.now()}`,
-        timestamp: Date.now(),
-        type: 'DIALOGUE',
-        description: `${character.name}: "${action.dialogue}"`,
-        characterId: character.id,
-      });
+      const allChars = Array.from(worldState.characters.values());
+      DialogueSystem.getInstance().executeSpeech(character, action.dialogue, allChars);
     } else if (action.type === 'INSPECT') {
       character.activity = 'inspecting';
       worldState.eventBus.emit('worldEvent', {

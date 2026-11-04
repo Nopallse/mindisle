@@ -30,13 +30,13 @@
 ---
 
 ## Phase 3 — Perception, Dialogue & Social Knowledge Transfer
-- [ ] Vision perception radius (6 tiles) enforced; unseen objects cannot be targeted.
-- [ ] Hearing radius (4 tiles) enforced; dialogue cannot be perceived beyond range.
-- [ ] Spoken dialogue emitted as public event only after action execution.
-- [ ] Speech bubbles render over characters in Phaser with colored name tags.
-- [ ] Conversational turn-taking and cooldowns prevent infinite loops.
-- [ ] Knowledge transfer occurs logically through observation or dialogue (Scenario G).
-- [ ] Private thoughts are never broadcast or leaked into public conversation history.
+- [x] Vision perception radius (6 tiles) enforced; unseen objects cannot be targeted.
+- [x] Hearing radius (4 tiles) enforced; dialogue cannot be perceived beyond range.
+- [x] Spoken dialogue emitted as public event only after action execution.
+- [x] Speech bubbles render over characters in Phaser with colored name tags.
+- [x] Conversational turn-taking and cooldowns prevent infinite loops.
+- [x] Knowledge transfer occurs logically through observation or dialogue (Scenario G).
+- [x] Private thoughts are never broadcast or leaked into public conversation history.
 
 ---
 

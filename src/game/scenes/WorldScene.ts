@@ -3,6 +3,8 @@ import { generatePixelArtAssets } from '../assets/pixelArtGenerator';
 import { WorldState } from '../../simulation/world/WorldState';
 import { CharacterId, Direction } from '../../types/character';
 import { GameBridge, CameraAction } from '../GameBridge';
+import { DialogueBubble } from '../ui/DialogueBubble';
+import { DialogueEventData } from '../../simulation/dialogue/DialogueSystem';
 
 interface CharacterVisual {
   sprite: Phaser.GameObjects.Sprite;
@@ -20,6 +22,7 @@ export class WorldScene extends Phaser.Scene {
   private gameBridge: GameBridge;
 
   private characters: Map<CharacterId, CharacterVisual> = new Map();
+  private activeDialogueBubbles: Map<CharacterId, DialogueBubble> = new Map();
   private waterTiles: Phaser.GameObjects.Sprite[] = [];
   private waterTimer = 0;
   private ambientOverlay?: Phaser.GameObjects.Graphics;
@@ -79,6 +82,32 @@ export class WorldScene extends Phaser.Scene {
     this.unsubscribeCamera = this.gameBridge.onCameraAction((action: CameraAction) => {
       this.handleCameraAction(action);
     });
+
+    // 9. Listen to Dialogue Spoken Events (Phase 3 speech bubbles)
+    this.worldState.eventBus.on('dialogueSpoken', (event: DialogueEventData) => {
+      this.showDialogueBubble(event);
+    });
+  }
+
+  private showDialogueBubble(event: DialogueEventData): void {
+    const existing = this.activeDialogueBubbles.get(event.speakerId);
+    if (existing) {
+      existing.destroy();
+      this.activeDialogueBubbles.delete(event.speakerId);
+    }
+
+    const visual = this.characters.get(event.speakerId);
+    if (!visual) return;
+
+    const bubble = new DialogueBubble(
+      this,
+      visual.sprite.x,
+      visual.sprite.y - 58,
+      event.speakerId,
+      event.speakerName,
+      event.text
+    );
+    this.activeDialogueBubbles.set(event.speakerId, bubble);
   }
 
   private createMapLayers(): void {
@@ -567,6 +596,16 @@ export class WorldScene extends Phaser.Scene {
 
       if (sprite.anims.currentAnim?.key !== animKey) {
         sprite.play(animKey, true);
+      }
+    }
+
+    // 4. Update active dialogue speech bubbles to follow character positions
+    for (const [id, bubble] of this.activeDialogueBubbles.entries()) {
+      const visual = this.characters.get(id);
+      if (visual && bubble.active) {
+        bubble.setPosition(visual.sprite.x, visual.sprite.y - 58);
+      } else if (!bubble.active) {
+        this.activeDialogueBubbles.delete(id);
       }
     }
   }

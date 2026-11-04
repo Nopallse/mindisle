@@ -50,14 +50,14 @@ Status Legend:
 ---
 
 ## Phase 3 — Perception, Dialogue & Social Knowledge Transfer
-- [ ] Perception pipeline: Bounded line-of-sight and vision radius (6 tiles).
-- [ ] Hearing pipeline: Bounded dialogue audibility radius (4 tiles).
-- [ ] Execution-gated speech: Dialogue becomes public only after validated `SPEAK` action execution.
-- [ ] Visual speech bubbles: Overhead dialogue balloons with colored character name tags (Adam/Naufal blue, Eve/Lauren pink).
-- [ ] Social turn-taking and conversational cooldowns.
-- [ ] In-world knowledge transfer via observation and dialogue (Scenario G).
+- [x] Perception pipeline: Bounded line-of-sight and vision radius (6 tiles).
+- [x] Hearing pipeline: Bounded dialogue audibility radius (4 tiles).
+- [x] Execution-gated speech: Dialogue becomes public only after validated `SPEAK` action execution.
+- [x] Visual speech bubbles: Overhead dialogue balloons with colored character name tags (Adam/Naufal blue, Eve/Lauren pink).
+- [x] Social turn-taking and conversational cooldowns.
+- [x] In-world knowledge transfer via observation and dialogue (Scenario G).
 
-**Status**: `not-started`  
+**Status**: `completed`  
 **Acceptance**: Characters initiate contextual conversations within hearing distance and acquire shared knowledge without telepathic memory leaks.
 
 ---
