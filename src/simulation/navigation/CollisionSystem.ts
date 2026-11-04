@@ -14,6 +14,10 @@ export class CollisionSystem {
     this.gridMap = gridMap;
   }
 
+  public isWalkable(x: number, y: number): boolean {
+    return this.gridMap.isWalkable(x, y);
+  }
+
   public canMoveTo(
     x: number,
     y: number,

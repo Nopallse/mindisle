@@ -2,7 +2,14 @@ export type CharacterId = 'naufal' | 'lauren';
 
 export type Direction = 'down' | 'left' | 'right' | 'up';
 
-export type CharacterActivity = 'idle' | 'walking' | 'observing' | 'resting';
+export type CharacterActivity =
+  | 'idle'
+  | 'walking'
+  | 'observing'
+  | 'resting'
+  | 'speaking'
+  | 'inspecting'
+  | 'crafting';
 
 export interface CharacterAttributes {
   energy: number;      // 0 - 100

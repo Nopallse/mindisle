@@ -35,16 +35,16 @@ Status Legend:
 ---
 
 ## Phase 2 — Gemini Brain & Causality Gateway
-- [ ] Server-side Gemini client integration via official `@google/genai` SDK.
-- [ ] Isolated prompt contexts and system instructions for Naufal and Lauren.
-- [ ] Structured decision proposal schema enforced via Zod.
-- [ ] Causality Gateway: Rejection of magical creation claims without causal history.
-- [ ] Asynchronous non-blocking scheduler: Phaser rendering loop never blocks on AI latency.
-- [ ] Deterministic safe fallback for timeouts, rate limits, and network errors.
-- [ ] Telemetry logging: Request ID, latency, model ID, and token usage metadata.
-- [ ] Mocked Gemini test fixtures verifying Scenarios B, C, D, and H.
+- [x] Server-side Gemini client integration via official `@google/genai` SDK.
+- [x] Isolated prompt contexts and system instructions for Naufal and Lauren.
+- [x] Structured decision proposal schema enforced via Zod.
+- [x] Causality Gateway: Rejection of magical creation claims without causal history.
+- [x] Asynchronous non-blocking scheduler: Phaser rendering loop never blocks on AI latency.
+- [x] Deterministic safe fallback for timeouts, rate limits, and network errors.
+- [x] Telemetry logging: Request ID, latency, model ID, and token usage metadata.
+- [x] Mocked Gemini test fixtures verifying Scenarios B, C, D, and H.
 
-**Status**: `in-progress`  
+**Status**: `completed`  
 **Acceptance**: Both characters independently receive structured AI decisions and execute valid actions in the simulation without blocking the rendering loop.
 
 ---

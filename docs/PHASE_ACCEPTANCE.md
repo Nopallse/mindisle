@@ -15,17 +15,17 @@
 ---
 
 ## Phase 2 — Gemini Brain & Causality Gateway
-- [ ] Gemini API client runs strictly server-side via official `@google/genai` SDK.
-- [ ] Model ID is configurable via `GEMINI_MODEL` environment variable.
-- [ ] Separate, isolated prompt contexts and system instructions for Naufal and Lauren.
-- [ ] Decision proposals validate strictly against versioned Zod schemas.
-- [ ] Invalid actions (e.g. out-of-bounds target, non-walkable tile) are rejected by policy validator.
-- [ ] One in-flight decision per character; no duplicate simultaneous requests.
-- [ ] Asynchronous non-blocking loop: Phaser 60 FPS rendering never stutters during API latency.
-- [ ] Safe fallback triggers upon timeout, rate limit, or network error.
-- [ ] Request telemetry recorded (latency, token usage, model ID, request UUID).
-- [ ] Zero client-side leakage of `GEMINI_API_KEY`.
-- [ ] Automated tests verify Scenario B (no resources), Scenario C (no knowledge), and Scenario H (no magical creation).
+- [x] Gemini API client runs strictly server-side via official `@google/genai` SDK.
+- [x] Model ID is configurable via `GEMINI_MODEL` environment variable.
+- [x] Separate, isolated prompt contexts and system instructions for Naufal and Lauren.
+- [x] Decision proposals validate strictly against versioned Zod schemas.
+- [x] Invalid actions (e.g. out-of-bounds target, non-walkable tile) are rejected by policy validator.
+- [x] One in-flight decision per character; no duplicate simultaneous requests.
+- [x] Asynchronous non-blocking loop: Phaser 60 FPS rendering never stutters during API latency.
+- [x] Safe fallback triggers upon timeout, rate limit, or network error.
+- [x] Request telemetry recorded (latency, token usage, model ID, request UUID).
+- [x] Zero client-side leakage of `GEMINI_API_KEY`.
+- [x] Automated tests verify Scenario B (no resources), Scenario C (no knowledge), and Scenario H (no magical creation).
 
 ---
 

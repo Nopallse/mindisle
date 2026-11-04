@@ -6,6 +6,7 @@ import { Character } from '../entities/Character';
 import { EventBus } from '../events/EventBus';
 import { CollisionSystem } from '../navigation/CollisionSystem';
 import { GridMap } from '../navigation/GridMap';
+import { AgentOrchestrator } from '../../ai/orchestrator/AgentOrchestrator';
 
 export class WorldState {
   private static instance: WorldState;
@@ -14,6 +15,7 @@ export class WorldState {
   public readonly collisionSystem: CollisionSystem;
   public readonly clock: WorldClock;
   public readonly eventBus: EventBus;
+  public readonly agentOrchestrator: AgentOrchestrator;
 
   public readonly characters: Map<CharacterId, Character> = new Map();
   private eventHistory: WorldEvent[] = [];
@@ -27,6 +29,7 @@ export class WorldState {
     this.collisionSystem = new CollisionSystem(this.gridMap);
     this.clock = new WorldClock(1, 8, 0);
     this.eventBus = EventBus.getInstance();
+    this.agentOrchestrator = AgentOrchestrator.getInstance();
 
     this.initializeCharacters();
     this.initializeEvents();
@@ -95,7 +98,10 @@ export class WorldState {
       }
     }
 
-    // 3. Emit simulation tick update
+    // 3. Update agent deliberation and decision cycles
+    this.agentOrchestrator.update(simDelta, this);
+
+    // 4. Emit simulation tick update
     this.eventBus.emit('worldTick', this.getSnapshot());
   }
 
