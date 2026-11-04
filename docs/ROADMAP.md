@@ -63,15 +63,15 @@ Status Legend:
 ---
 
 ## Phase 4 — Persistent Memory & Firebase Firestore
-- [ ] Firebase Firestore integration using server-side Firebase Admin SDK.
-- [ ] Character-isolated subcollections: `worlds/{worldId}/characters/{characterId}/memories`.
-- [ ] Contextual memory retrieval combining recency decay, importance weighting, and keyword match.
-- [ ] Periodic memory consolidation and reflective summarization.
-- [ ] Epistemic knowledge graph distinguishing facts ($\ge 0.9$), beliefs ($0.5-0.9$), and suspicions ($<0.5$).
-- [ ] Automated memory privacy isolation tests.
-- [ ] Application restart recall tests (Scenario F).
+- [x] Firebase Firestore integration using server-side Firebase Admin SDK.
+- [x] Character-isolated subcollections: `worlds/{worldId}/characters/{characterId}/memories`.
+- [x] Contextual memory retrieval combining recency decay, importance weighting, and keyword match.
+- [x] Periodic memory consolidation and reflective summarization.
+- [x] Epistemic knowledge graph distinguishing facts ($\ge 0.9$), beliefs ($0.5-0.9$), and suspicions ($<0.5$).
+- [x] Automated memory privacy isolation tests.
+- [x] Application restart recall tests (Scenario F).
 
-**Status**: `not-started`  
+**Status**: `completed`  
 **Acceptance**: Characters recall past experiences and knowledge after server restart, with strict zero-leakage privacy.
 
 ---

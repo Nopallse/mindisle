@@ -41,12 +41,12 @@
 ---
 
 ## Phase 4 — Persistent Memory & Firebase Firestore
-- [ ] Memory documents persist in character-isolated Firestore subcollections.
-- [ ] Memory retrieval combines recency decay, importance, and epistemic confidence.
-- [ ] Consolidation pipeline merges episodic records into reflective summaries.
-- [ ] Character epistemic graphs distinguish known facts, beliefs, and suspicions.
-- [ ] Privacy isolation tests pass: Naufal cannot query Lauren's private memories and vice versa.
-- [ ] Application restart recall tests pass: state and memories restore accurately (Scenario F).
+- [x] Memory documents persist in character-isolated Firestore subcollections.
+- [x] Memory retrieval combines recency decay, importance, and epistemic confidence.
+- [x] Consolidation pipeline merges episodic records into reflective summaries.
+- [x] Character epistemic graphs distinguish known facts, beliefs, and suspicions.
+- [x] Privacy isolation tests pass: Naufal cannot query Lauren's private memories and vice versa.
+- [x] Application restart recall tests pass: state and memories restore accurately (Scenario F).
 
 ---
 
