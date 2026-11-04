@@ -90,14 +90,14 @@ Status Legend:
 ---
 
 ## Phase 6 — Mindisle Creative Engine, Asset Pipeline & World Provenance
-- [ ] Creative Engine reasoning: Characters synthesize open-ended inventions without fixed catalogs (Scenario E).
-- [ ] Zod ObjectSpecification parser (dimensions, materials, collision, interaction).
-- [ ] Programmatic pixel-art generation: Procedural pixel matrices, palette mapping, and layer composition.
-- [ ] Automated visual asset validation: Strict dimensions, transparency mask, and palette harmony.
-- [ ] Firebase Storage persistence: Automated PNG upload and Firestore `assetDefinitions` linking.
-- [ ] Multi-step construction project execution over simulation time.
-- [ ] Immutable `ObjectProvenance` record generation linking creator, materials, and inspiration.
-- [ ] Dynamic in-game sprite injection into Phaser TextureManager without page reloads.
+- [x] Creative Engine reasoning: Characters synthesize open-ended inventions without fixed catalogs (Scenario E).
+- [x] Zod ObjectSpecification parser (dimensions, materials, collision, interaction).
+- [x] Programmatic pixel-art generation: Procedural pixel matrices, palette mapping, and layer composition.
+- [x] Automated visual asset validation: Strict dimensions, transparency mask, and palette harmony.
+- [x] Firebase Storage persistence: Automated PNG upload and Firestore `assetDefinitions` linking.
+- [x] Multi-step construction project execution over simulation time.
+- [x] Immutable `ObjectProvenance` record generation linking creator, materials, and inspiration.
+- [x] Dynamic in-game sprite injection into Phaser TextureManager without page reloads.
 
-**Status**: `not-started`  
+**Status**: `completed`  
 **Acceptance**: Characters can imagine, specify, gather materials for, and construct novel physical objects that become permanent, interactive, visually unique fixtures in the shared world.

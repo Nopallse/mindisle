@@ -60,12 +60,12 @@
 ---
 
 ## Phase 6 — Mindisle Creative Engine, Asset Pipeline & World Provenance
-- [ ] Creative Engine reasoning proposes novel objects without fixed catalog restrictions (Scenario E).
-- [ ] Zod `ObjectSpecification` validates dimensions, materials, tools, and collision boxes.
-- [ ] Procedural pixel-art generator produces valid pixel matrices and RGBA buffers.
-- [ ] Asset validator enforces dimensions, transparency masks, and palette harmony.
-- [ ] Generated assets upload to Firebase Storage, with metadata stored in Firestore.
-- [ ] Multi-step construction projects execute over simulation time.
-- [ ] Complete 14-step causal chain verified (Scenario A).
-- [ ] Dynamic in-game sprite injection into Phaser TextureManager works without page reload.
-- [ ] Immutable `ObjectProvenance` log records creator, materials, tools, and inspiration.
+- [x] Creative Engine reasoning proposes novel objects without fixed catalog restrictions (Scenario E).
+- [x] Zod `ObjectSpecification` validates dimensions, materials, tools, and collision boxes.
+- [x] Procedural pixel-art generator produces valid pixel matrices and RGBA buffers.
+- [x] Asset validator enforces dimensions, transparency masks, and palette harmony.
+- [x] Generated assets upload to Firebase Storage, with metadata stored in Firestore.
+- [x] Multi-step construction projects execute over simulation time.
+- [x] Complete 14-step causal chain verified (Scenario A).
+- [x] Dynamic in-game sprite injection into Phaser TextureManager works without page reload.
+- [x] Immutable `ObjectProvenance` log records creator, materials, tools, and inspiration.
