@@ -77,14 +77,14 @@ Status Legend:
 ---
 
 ## Phase 5 — Autonomous Living World & Offline Progression
-- [ ] Dynamic physiological needs: Energy, curiosity, comfort, and sociability decay.
-- [ ] Motivation appraisal: Needs trigger active desires and intentions.
-- [ ] Emotional appraisal state (valence, arousal, dominance).
-- [ ] Day/night cycle with dynamic ambient lighting tinting.
-- [ ] Dynamic weather conditions affecting behavior (rain, clear sun, dusk mist).
-- [ ] Deterministic offline progression: World time advances mathematically without hallucinated events.
+- [x] Dynamic physiological needs: Energy, curiosity, comfort, and sociability decay.
+- [x] Motivation appraisal: Needs trigger active desires and intentions.
+- [x] Emotional appraisal state (valence, arousal, dominance).
+- [x] Day/night cycle with dynamic ambient lighting tinting.
+- [x] Dynamic weather conditions affecting behavior (rain, clear sun, dusk mist).
+- [x] Deterministic offline progression: World time advances mathematically without hallucinated events.
 
-**Status**: `not-started`  
+**Status**: `completed`  
 **Acceptance**: Characters independently live daily routines, rest near campfires, explore the island, and manage needs without player intervention.
 
 ---

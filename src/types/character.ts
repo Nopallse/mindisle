@@ -15,6 +15,7 @@ export interface CharacterAttributes {
   energy: number;      // 0 - 100
   curiosity: number;   // 0 - 100
   sociability: number; // 0 - 100
+  comfort: number;     // 0 - 100
 }
 
 export interface CharacterSnapshot {

@@ -51,11 +51,11 @@
 ---
 
 ## Phase 5 — Autonomous Living World & Offline Progression
-- [ ] Physiological needs (energy, curiosity, comfort, sociability) decay deterministically.
-- [ ] Needs trigger active motivations and goal generation.
-- [ ] Simulated emotional appraisal updates based on outcomes.
-- [ ] Day/night cycle transitions with dynamic ambient lighting tinting.
-- [ ] Deterministic offline progression advances world state without hallucinated events.
+- [x] Physiological needs (energy, curiosity, comfort, sociability) decay deterministically.
+- [x] Needs trigger active motivations and goal generation.
+- [x] Simulated emotional appraisal updates based on outcomes.
+- [x] Day/night cycle transitions with dynamic ambient lighting tinting.
+- [x] Deterministic offline progression advances world state without hallucinated events.
 
 ---
 

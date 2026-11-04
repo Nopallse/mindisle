@@ -50,6 +50,7 @@ export class Character implements Positionable {
       energy: 90,
       curiosity: 85,
       sociability: 80,
+      comfort: 85,
     };
 
     // Stagger idle timers so characters don't move in sync

@@ -35,6 +35,12 @@ export class WorldClock {
     }
   }
 
+  public advanceMinutes(mins = 1): void {
+    for (let i = 0; i < mins; i++) {
+      this.advanceMinute();
+    }
+  }
+
   private advanceMinute(): void {
     this.minute += 1;
     if (this.minute >= 60) {

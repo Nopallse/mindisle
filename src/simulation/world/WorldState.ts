@@ -48,6 +48,7 @@ export class WorldState {
       energy: 95,
       curiosity: 90,
       sociability: 85,
+      comfort: 90,
     });
 
     // 2. Lauren: Female, Olive/Green tunic (tile: 14, 10)
@@ -55,6 +56,7 @@ export class WorldState {
       energy: 90,
       curiosity: 88,
       sociability: 82,
+      comfort: 88,
     });
 
     this.characters.set('naufal', naufal);
