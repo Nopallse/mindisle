@@ -1,92 +1,46 @@
 ---
 name: memory-systems
-description: Builds EDEN character-owned short-term, episodic, semantic, and long-term memory, retrieval, consolidation, persistence, and memory privacy.
+description: Builds Mindisle character-owned short-term, episodic, semantic, and reflective memory, retrieval, consolidation, Firestore persistence, and character privacy isolation.
 ---
 
-# EDEN Memory Systems
+# Mindisle Memory Systems
+
+Responsible for character-owned memory storage, retrieval, reflection, consolidation, and privacy boundaries.
 
 ## Responsibilities
 
-Build persistent memory for each AI character.
+- Character-isolated episodic, semantic, working, and reflective memories.
+- Storing memories in Firestore subcollections: `worlds/{worldId}/characters/{characterId}/memories/{memoryId}`.
+- Contextual retrieval based on Recency, Importance, Relevance, and Epistemic Confidence.
+- Periodic memory consolidation and reflective summarization.
+- Strict privacy enforcement: Naufal cannot query Lauren's memories and vice versa.
 
-## Memory Types
+## Memory Types & Data Contract
 
-### 1. Working Memory
+```typescript
+interface CharacterMemory {
+  id: string;
+  characterId: 'naufal' | 'lauren';
+  type: 'episodic' | 'semantic' | 'reflection' | 'creative';
+  content: string;
+  importance: number; // 1 to 10
+  confidence: number; // 0.0 to 1.0
+  sourceEventId?: string; // Provenance link to actual WorldEvent
+  sourceProjectId?: string; // Link to CreationProject if applicable
+  location?: { x: number; y: number; landmark?: string };
+  emotionalValence?: number; // -1.0 to 1.0
+  createdAt: number; // UTC timestamp
+  lastRecalledAt?: number;
+}
+```
 
-Recent observations and current context.
+## Architectural Rules
 
-### 2. Episodic Memory
+1. **Grounded Provenance**: Memories must originate from actual observations, executions, or conversations. Never record hallucinations as real memories.
+2. **Strict Privacy**: Queries must always filter by `characterId`. An agent prompt context builder receives only memories owned by that specific character.
+3. **Bounded Retrieval**: Do not load all memories into Gemini prompt contexts. Retrieve top $K$ (e.g. 5-8) most relevant memories by combining recency decay, importance weighting, and keyword/semantic match.
+4. **Offline & Restart Persistence**: Memory documents must survive browser reloads and server restarts.
 
-Specific experiences with timestamp and location.
+## Dependencies
 
-### 3. Semantic Memory
-
-Compact facts learned from repeated or reliable experiences.
-
-### 4. Relationship Memory
-
-Character-specific beliefs about other characters, supported by actual events.
-
-## Required Metadata
-
-Each memory should include:
-
-- Owner character.
-- Source event.
-- Created timestamp.
-- Location if available.
-- Memory type.
-- Importance.
-- Confidence.
-- Visibility policy.
-- Content.
-- Embedding when available.
-
-## Rules
-
-- Memories must originate from real events.
-- Never save hallucinations as facts.
-- Never allow Naufal to retrieve Lauren's private memories.
-- Never allow Lauren to retrieve Naufal's private memories.
-- Do not store every minor movement.
-- Prefer meaningful experiences.
-- Preserve source references.
-- Avoid duplicate memories.
-
-## Retrieval
-
-Retrieve memories based on:
-
-- Character ownership.
-- Relevance.
-- Recency.
-- Importance.
-- Context.
-
-Use bounded memory retrieval.
-
-## Consolidation
-
-Periodically:
-
-- Identify important experiences.
-- Merge redundant memories.
-- Preserve important events.
-- Create compact summaries.
-- Keep provenance.
-
-## Implementation
-
-1. Define memory types.
-2. Persist episodic records.
-3. Implement character-specific retrieval.
-4. Add consolidation.
-5. Add embeddings if justified.
-6. Test privacy isolation.
-7. Test restart recall.
-
-## Acceptance
-
-Naufal can remember his own past experiences after restart.
-
-Lauren cannot access Naufal's private memories.
+- Coordinates with: `firebase-world-database`, `knowledge-and-learning`, `world-provenance`, `gemini-agent-engineering`.

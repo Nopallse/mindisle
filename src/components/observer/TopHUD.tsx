@@ -97,7 +97,7 @@ export const TopHUD: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="font-bold text-sm tracking-wide text-white uppercase font-mono">
-              EDEN
+              MINDISLE
             </h1>
             <span className="text-[10px] font-medium tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
               PHASE 1

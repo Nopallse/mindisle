@@ -1,56 +1,50 @@
 ---
 name: quality-gates
-description: Runs EDEN engineering quality checks including TypeScript, lint, unit tests, integration tests, browser smoke tests, and phase acceptance verification.
+description: Runs Mindisle engineering quality checks including TypeScript typechecks, ESLint linting, Vitest scenario tests (Scenarios A through H), Firebase security rules validation, and production build verification.
 ---
 
-# EDEN Quality Gates
+# Mindisle Quality Gates
 
-## Responsibilities
+Responsible for enforcing engineering standards, type safety, test suites, and phase acceptance verification.
 
-Verify implementation quality.
+## Mandatory Quality Checks
 
-Use:
+Every non-trivial PR or phase increment must pass:
 
-- Before marking a phase complete.
-- After substantial code changes.
-- During regression investigation.
-- Before release.
+```bash
+# 1. Type Safety
+npm run typecheck      # tsc --noEmit: zero errors allowed
 
-## Checks
+# 2. Code Standards
+npm run lint           # next lint: zero warnings, zero errors
 
-1. Inspect package scripts.
-2. Run formatting and lint.
-3. Run TypeScript typecheck.
-4. Run relevant unit tests.
-5. Run integration tests.
-6. Run production build.
-7. Run browser smoke tests if configured.
-8. Verify phase acceptance criteria.
-9. Report exact outcomes.
+# 3. Automated Simulation & Causality Tests
+npm test               # vitest run: all unit & scenario tests pass
 
-## AI-Specific Checks
+# 4. Production Build Verification
+npm run build          # next build: App Router compiles clean static/dynamic routes
+```
 
-- Malformed JSON is rejected.
-- Zod schema is enforced.
-- Unsupported actions are rejected.
-- Out-of-bounds movement is rejected.
-- Stale decisions are ignored.
-- Duplicate requests are prevented.
-- Timeout is handled.
-- Rate limits are handled.
-- API key is not exposed.
-- Naufal and Lauren memory isolation works.
-- Private thoughts are not emitted as dialogue.
-- Unit tests do not require a live Gemini API key.
+## AI & Causality Quality Verifications
+
+- **Schema Strictness**: Zod validates all Gemini outputs; malformed outputs fall back to safe deterministic actions.
+- **Causality Enforcement (Scenarios A–H)**:
+  - Scenario A: Valid creation with all resources succeeds.
+  - Scenario B: Creation without resources fails.
+  - Scenario C: Creation without knowledge fails.
+  - Scenario D: Failed construction leaves consequences and memory.
+  - Scenario E: New invention without predefined catalog succeeds via Creative Engine.
+  - Scenario F: World state and assets survive restart.
+  - Scenario G: Shared discovery transfers knowledge only through in-world perception.
+  - Scenario H: Hallucinated creations without execution history are rejected.
+- **Privacy Gate**: Assert that Naufal's context cannot query Lauren's private memories and vice versa.
+- **Credentials Gate**: Assert that `GEMINI_API_KEY` and Firebase service account keys are never imported into browser or Phaser bundles.
 
 ## Reporting Format
 
-Use:
+- Status must be clearly reported as `PASS`, `FAIL`, or `NOT RUN`.
+- Never claim unrun tests passed.
 
-PASS
-FAIL
-NOT RUN
+## Dependencies
 
-Never say all tests passed if some tests were not executed.
-
-Include remaining risks and reproduction steps.
+- Coordinates with: `test-ai-simulation`, `security-and-secrets`, `eden-orchestrator`.

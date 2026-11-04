@@ -1,195 +1,145 @@
-# EDEN — Technical Architecture
+# Mindisle — Technical Architecture
 
-## System Overview
+## 1. System Overview
 
-### Browser
-- Next.js UI.
-- Phaser renderer.
-- Game input and camera.
-- Receives sanitized world snapshots.
-- Receives public events.
-- Sends observer controls.
+Mindisle separates rendering presentation, deterministic world simulation, AI reasoning, and persistent cloud storage into strictly bounded subsystems.
 
-### Server
-- World simulation coordinator.
-- Per-character agent orchestrator.
-- Gemini service.
-- Zod validation.
-- Memory retrieval.
-- Persistence.
-- Prisma repositories.
+```mermaid
+graph TD
+    subgraph "Client Browser (Observer & Presentation)"
+        UI[Next.js Observer Dashboard]
+        Canvas[Phaser 3 Top-Down Renderer]
+        Bridge[GameBridge / EventBus]
+        UI <--> Bridge
+        Bridge <--> Canvas
+    end
 
-## Core Principle
+    subgraph "Next.js Server (Authoritative Simulation & AI Brains)"
+        SimEngine[Simulation Engine & WorldClock]
+        Causality[Causality Engine & Provenance]
+        Creative[Creative Engine & Pixel Generation]
+        AgentOrch[Gemini Agent Orchestrator]
+        ZodVal[Zod Validation & Policy Layer]
 
-The simulation is authoritative.
+        SimEngine <--> Causality
+        Causality <--> Creative
+        AgentOrch --> ZodVal
+        ZodVal --> Causality
+    end
 
-Gemini is a probabilistic decision proposer.
+    subgraph "Cloud Persistence & AI APIs"
+        GeminiSDK["@google/genai SDK (Server-Side)"]
+        Firestore[(Firebase Firestore: Metadata & World State)]
+        Storage[(Firebase Storage: PNG / WebP Asset Binaries)]
 
-Gemini must never directly mutate authoritative world state.
+        AgentOrch <--> GeminiSDK
+        SimEngine <--> Firestore
+        Creative <--> Storage
+    end
 
-## Implemented Module Layout (Phase 1 Verified)
+    Bridge -.->|State Snapshots / Actions| SimEngine
+```
 
+---
+
+## 2. Core Architectural Invariants
+
+1. **Simulation Engine is Authoritative**:
+   - The simulation engine (`src/simulation/`) owns world clock, character positions, collision, inventory, and valid actions.
+   - Phaser and Gemini are subordinate to the simulation engine.
+2. **Unlimited Imagination, Logical Execution**:
+   - The **Creative Engine** allows AI characters to imagine open-ended designs without catalog restrictions.
+   - The **Causality Engine** strictly validates that resources, tools, and labor steps exist before any physical world mutation occurs.
+3. **Pixel Art Is Actual Data**:
+   - Assets are not just prompt descriptions; they are stored as pixel matrices, palettes, and PNG files in Firebase Storage and Firestore.
+4. **Asynchronous Non-Blocking Execution**:
+   - The Phaser 60 FPS rendering loop never waits synchronously for Gemini or cloud network requests.
+   - Decisions are scheduled asynchronously; characters maintain activities or take safe fallbacks if latency occurs.
+5. **Epistemic & Memory Privacy**:
+   - Naufal and Lauren have isolated contexts. Gemini calls receive only that character's private state, permitted local perceptions, and owned memories.
+
+---
+
+## 3. Module Layout
+
+```text
 src/
-  app/
-    globals.css             # Tailwind + pixel-art crisp rendering rules
-    layout.tsx              # Root HTML wrapper and metadata
-    page.tsx                # Observer dashboard entrypoint
-
+  app/                      # Next.js App Router (page.tsx, layout.tsx, globals.css)
   components/
-    observer/
-      ObserverLayout.tsx    # Responsive grid layout with dynamic SSR-safe Phaser
-      TopHUD.tsx            # World clock, day counter, pause, speed & zoom controls
-      CharacterSidebar.tsx  # Character list (Naufal, Lauren) & focus controls
-      CharacterInspectionPanel.tsx # Selected character coordinates, facing, activity & attributes
-      WorldEventLog.tsx     # Live authoritative simulation event stream
-      PhaserCanvas.tsx      # StrictMode-safe Phaser canvas mount & teardown
-
+    observer/               # React observer dashboard (TopHUD, Minimap, CharacterInspection, EventLog)
   game/
-    config.ts               # Orthogonal resolution, pixelArt nearest-neighbor rendering
-    GameBridge.ts           # Typed event & action bridge between UI and Phaser
-    assets/
-      pixelArtGenerator.ts  # Deterministic procedural 32x32 top-down pixel-art generator
+    config.ts               # Phaser game configuration (orthogonal, nearest-neighbor)
+    GameBridge.ts           # Decoupled event & action bridge between UI and Phaser
     scenes/
-      WorldScene.ts         # Tilemap rendering, character sprites, 4-dir animation, camera pan & zoom
-
+      WorldScene.ts         # Phaser scene: map layers, character sprites, particles, lighting
+    assets/
+      pixelArtGenerator.ts  # In-engine pixel art rendering & dynamic texture registration
   simulation/
-    clock/
-      WorldClock.ts         # Authoritative simulation time, speed multipliers, pause
-    events/
-      EventBus.ts           # Authoritative typed event bus pub/sub
-    navigation/
-      GridMap.ts            # 30x20 orthogonal tile grid (meadow, paths, pond, bridge, trees, rocks)
-      CollisionSystem.ts    # Tile walkability, map boundaries & occupant collision validator
-    entities/
-      Character.ts          # Deterministic character entity, tile coordinates & interpolation
-    world/
-      WorldState.ts         # Central singleton simulation state coordinator & snapshot provider
-
-  types/
-    character.ts            # Character domain types (Direction, Activity, Snapshot)
-    world.ts                # World domain types (Tile, TileType, WorldTime, WorldSnapshot)
-    events.ts               # Event types (WorldEvent, WorldEventType)
-
-## Future AI & Persistence Modules (Phases 2-5)
-
-src/
+    clock/WorldClock.ts     # Authoritative simulation time, speed multipliers, pause
+    navigation/GridMap.ts   # 30x20 orthogonal tile grid
+    navigation/CollisionSystem.ts # Walkability, map boundaries & occupant collision
+    entities/Character.ts   # Character simulation entity & tile coordinates
+    world/WorldState.ts     # Singleton authoritative world state coordinator
+    causality/              # Causality Engine: requirements validator, dependency checks
+  creative/
+    specification/          # Zod ObjectSpecification parser & validator
+    generator/              # Procedural pixel matrix synthesis & palette remapping
+    validator/              # Visual quality, transparency & dimension validation
   ai/
-    gemini/
-    agents/
-    prompts/
-    schemas/
-    orchestration/
-
+    gemini/client.ts        # Server-side @google/genai client
+    prompts/                # Naufal and Lauren prompt templates
+    schemas/                # Zod decision & proposal schemas
+    orchestrator.ts         # Agent scheduling & decision lifecycle
   memory/
-    retrieval/
-    consolidation/
-    repositories/
+    retrieval/              # Relevance, recency & importance scoring
+    consolidation/          # Memory reflection & summarization
+    knowledge/              # Character epistemic graphs (facts, beliefs, suspicions)
+  provenance/               # Object creation lineage & audit logs
+  firebase/
+    admin.ts                # Server-side Firebase Admin SDK
+    client.ts               # Client-side Firebase App & Auth
+    repositories/           # Firestore collection wrappers
+    storage.ts              # Firebase Storage asset uploader & URL resolver
+  types/                    # Shared domain types (character, world, events, creative, causality)
+```
 
-  db/
-  lib/
+---
 
-## Decision Cycle
+## 4. Decision & Creation Lifecycle
 
-1. Scheduler determines that an agent is eligible to think.
-2. Perception service constructs permitted observations.
-3. Memory service retrieves relevant memories.
-4. Prompt builder creates bounded context.
-5. Gemini returns a structured decision.
-6. Zod validates the response.
-7. Policy validator checks action semantics.
-8. Action executor runs the action.
-9. Simulation emits events.
-10. Memory pipeline stores grounded observations.
-11. UI receives sanitized snapshots and public events.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Sim as Simulation Engine
+    participant Caus as Causality Engine
+    participant AI as Gemini Agent
+    participant Creat as Creative Engine
+    participant DB as Firebase (Firestore & Storage)
+    participant Game as Phaser Renderer
 
-## Async and Concurrency
+    Sim->>AI: Trigger thinking (needs, local perception, private memories)
+    AI->>AI: Reason about active motivation
+    AI-->>Caus: Propose Creation Project (e.g., "Carved Wooden Chair")
+    Caus->>Caus: Check knowledge, materials & tools
+    alt Missing Prereqs
+        Caus-->>AI: Reject proposal (record failure & consequence)
+    else Prereqs Met
+        Caus->>Creat: Request design specification & pixel asset
+        Creat->>Creat: Synthesize pixel matrix & validate dimensions
+        Creat->>DB: Upload PNG to Storage & definition to Firestore
+        Caus->>Sim: Schedule physical construction steps
+        Sim->>Sim: Execute labor steps over simulation time
+        Sim->>DB: Instantiate WorldObject & ObjectProvenance
+        Sim->>Game: Notify dynamic asset injection
+        Game->>Game: Register texture & spawn visible sprite
+    end
+```
 
-- Never block Phaser rendering on AI.
-- One in-flight decision per character by default.
-- Use cooldowns and event triggers.
-- Add request IDs and idempotency.
-- Ignore stale decisions if the world state changed materially.
-- Use timeouts.
-- Use bounded retries.
-- Use safe fallback behavior.
+---
 
-## Gemini Integration
+## 5. Persistence Stack: Firebase Firestore & Storage
 
-- Official SDK: @google/genai.
-- API key: GEMINI_API_KEY.
-- Model: GEMINI_MODEL.
-- Never hardcode model IDs in multiple files.
-- Use structured output.
-- Validate output with Zod.
-- Verify current official SDK documentation.
-- Do not send full history on every request.
-- Track latency and usage metadata when available.
-
-## Persistence
-
-Persist:
-
-- World configuration.
-- Latest world state.
-- Character profiles.
-- Character states.
-- Goals.
-- Relationships.
-- Public conversations.
-- World events.
-- Character-owned memories.
-- Decision and action audit metadata.
-
-Use transactions for state changes that must be atomic.
-
-## Privacy Boundary
-
-A character may receive:
-
-- Its own private profile.
-- Its own memories.
-- Public world state.
-- Permitted local observations.
-- Public dialogue it can hear.
-
-A character must not receive:
-
-- Another character's private thoughts.
-- Another character's private memories.
-- Hidden map information it has not perceived.
-- Developer-only diagnostics.
-
-## Failure Handling
-
-### Gemini unavailable
-
-- Keep the game running.
-- Do not fabricate successful decisions.
-- Use deterministic fallback.
-- Record error status.
-- Retry under bounded policy.
-
-### Database unavailable
-
-- Show degraded status.
-- Do not claim persistence.
-- Avoid silent data loss.
-- Do not show saved status unless confirmed.
-
-## Observability
-
-Capture:
-
-- Decision request ID.
-- Character ID.
-- Model identifier.
-- Started timestamp.
-- Completed timestamp.
-- Latency.
-- Validation outcome.
-- Execution outcome.
-- Usage metadata if available.
-- Error category.
-
-Never log API keys.
-
+Replaces the legacy Neon PostgreSQL / Prisma stack.
+- **Firestore**: World configuration, character state, subcollection memories, object instances, provenance, and event logs.
+- **Firebase Storage**: Binary PNG/WebP files, sprite sheets, and asset media.
+- Administrative writes are executed server-side via the Firebase Admin SDK.

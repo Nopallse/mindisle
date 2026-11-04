@@ -1,50 +1,35 @@
 ---
 name: security-and-secrets
-description: Reviews EDEN API security, Gemini key handling, server/client boundaries, request validation, rate limiting, logging, and character-memory privacy.
+description: Reviews Mindisle API security, Gemini key handling, Firebase Admin service account protection, Firestore/Storage security rules, rate limiting, and character-memory privacy boundaries.
 ---
 
-# EDEN Security
+# Mindisle Security & Secrets
 
-## Responsibilities
+Responsible for protecting system infrastructure, API keys, Firebase service accounts, character privacy, and preventing prompt-injection world mutations.
 
-Protect EDEN's infrastructure, API, secrets, and character privacy.
+## Core Security Invariants
 
-Use when working on:
+1. **Server-Side Secret Isolation**:
+   - `GEMINI_API_KEY` and `FIREBASE_ADMIN_PRIVATE_KEY` must never be prefixed with `NEXT_PUBLIC_` and must never be referenced in browser components or Phaser scenes.
+   - Administrative database writes and Gemini invocations occur exclusively in Next.js Server Actions or API routes.
+2. **Untrusted Model Output**:
+   - All AI output is treated as untrusted user input.
+   - Run Zod validation on every response.
+   - The Creative Engine sanitizes and validates all design specifications to prevent arbitrary code execution, script injection in SVG/text, or out-of-bounds geometries.
+3. **Firestore & Storage Security Rules**:
+   - Web clients cannot overwrite world state, bypass collision, or modify another character's private memories directly.
+   - Public clients have read-only access to sanitized world state and asset storage.
+4. **Character Epistemic Privacy**:
+   - A character's thoughts and private memories are confidential. They must never be exposed via public world events or leaked into another character's decision context.
 
-- Gemini API endpoints.
-- Database APIs.
-- Authentication.
-- Secrets.
-- Logging.
-- Memory access.
-- Security review.
+## Pre-Release Security Checklist
 
-## Rules
+- [ ] Does any client bundle expose `GEMINI_API_KEY` or `FIREBASE_ADMIN_PRIVATE_KEY`?
+- [ ] Can an observer client spoof player positions or force an object creation without server validation?
+- [ ] Are Firestore rules enforcing read-only access for unauthenticated observer clients?
+- [ ] Can Naufal retrieve Lauren's private memories through any public API route?
+- [ ] Are API error logs scrubbed of private keys and environment tokens?
 
-- Gemini API key must remain server-side.
-- Never prefix secret variables with NEXT*PUBLIC*.
-- Never return secrets in API responses.
-- Validate requests with Zod.
-- Apply rate limits.
-- Limit expensive AI requests.
-- Never trust client-supplied authoritative positions.
-- Never trust client-supplied action outcomes.
-- Load authoritative state on the server.
-- Enforce memory ownership.
-- Treat AI output as untrusted.
-- Avoid arbitrary code execution from AI agents.
+## Dependencies
 
-## Security Review Checklist
-
-1. Can browser code reveal the Gemini key?
-2. Can a client spoof world state?
-3. Can Naufal retrieve Lauren's private memory?
-4. Can Lauren retrieve Naufal's private memory?
-5. Can AI move characters through walls?
-6. Can repeated requests exhaust API quota?
-7. Do error messages leak secrets?
-8. Are private thoughts unnecessarily logged?
-
-## Acceptance
-
-No critical secret exposure, unauthorized memory access, or unvalidated world-state mutation.
+- Coordinates with: `firebase-world-database`, `firebase-asset-persistence`, `quality-gates`, `gemini-agent-engineering`.

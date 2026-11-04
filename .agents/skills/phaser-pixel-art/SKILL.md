@@ -1,67 +1,29 @@
 ---
 name: phaser-pixel-art
-description: Creates and integrates cohesive top-down pixel-art assets, spritesheets, tilemaps, animations, and visual effects for EDEN using Phaser conventions.
+description: Creates, integrates, and enforces cohesive top-down pixel-art assets, spritesheets, tilemaps, animations, dynamic textures, and visual effects for Mindisle using Phaser conventions.
 ---
 
 # Phaser Pixel Art Pipeline
 
-## Responsibilities
+Responsible for the aesthetic visual integrity, sprite formatting, tilemaps, animation sets, and dynamic texture registration in Phaser.
 
-Maintain visual consistency across EDEN.
+## Art Direction Guidelines
 
-Use when working on:
-- Character sprites.
-- Environment.
-- Tilesets.
-- Tilemaps.
-- Animations.
-- Pixel-art effects.
+- **True Top-Down Orthogonal Perspective**: Directly overhead camera angle (never isometric, never 2D side-scrolling platformer, never 3D tilt).
+- **Consistent Grid Scale**: 32×32 pixel tiles as the standard unit (supports 16×16, 32×32, 64×64 structured multi-tile objects).
+- **Nearest-Neighbor Rendering**: Strict crisp pixel edges; no anti-aliased blur or bilinear texture filtering.
+- **Harmonious Palette & Hue Shifting**: Highlights shift toward warm golden yellow/light green; shadows shift toward cool deep teal/navy. Avoid raw black shadows.
+- **Volume & Clustering**: Foliage and round objects use clustered volume shading rather than individual noise pixels.
+- **Dynamic Textures in WebGL**: Any canvas-generated texture must call `texture.refresh()` to upload pixel buffers into WebGL GPU VRAM.
 
-## Art Direction
+## Dynamic In-Game Asset Integration
 
-- True top-down orthogonal view.
-- Consistent tile scale.
-- Consistent sprite scale.
-- Nearest-neighbor rendering.
-- Clear silhouettes.
-- Four-direction character poses.
-- Consistent outlines.
-- Consistent color palette.
-- Consistent lighting.
+When the Creative Engine produces a new object or variation:
+1. Validate PNG/WebP dimensions and transparency.
+2. Load via `scene.load.image` or register directly into `scene.textures.addCanvas` / `scene.textures.addImage`.
+3. Slice animation frames or multi-tile layers using `texture.add(frameKey, ...)`.
+4. Render as a depth-sorted `Phaser.GameObjects.Sprite` with `setDepth(worldY)`.
 
-Never use:
-- Isometric tiles.
-- Side-view character sheets.
-- Perspective buildings.
-- Blurry image scaling.
+## Dependencies
 
-## Asset Pipeline
-
-1. Define logical tile size.
-2. Define sprite frame dimensions.
-3. Define asset naming conventions.
-4. Use placeholders initially.
-5. Create spritesheets.
-6. Document frame order.
-7. Validate transparent backgrounds.
-8. Integrate with Phaser.
-9. Test animation states.
-
-## Licensing
-
-Prefer:
-- Original assets.
-- User-provided assets.
-- Properly licensed assets.
-
-Record source and license for third-party assets.
-
-Never assume an internet image is free to use.
-
-## Acceptance
-
-- All assets share a coherent top-down style.
-- Sprite scales are consistent.
-- No blurry interpolation.
-- Missing assets are visible during development.
-
+- Coordinates with: `eden-game-foundation`, `pixel-art-generation`, `creative-engine`, `firebase-asset-persistence`.

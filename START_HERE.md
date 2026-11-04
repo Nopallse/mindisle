@@ -1,83 +1,53 @@
-# Start EDEN in Antigravity
+# Start Mindisle in Antigravity
 
 Open this folder as your Antigravity workspace.
 
-Start a fresh conversation and paste the following prompt.
+## Mindisle Development Principles
 
----
+Before executing any engineering task, review:
+1. `.agents/AGENTS.md`
+2. `docs/ARCHITECTURE.md`
+3. `docs/CAUSALITY_SYSTEM.md`
+4. `docs/CREATIVE_ENGINE.md`
+5. `docs/ROADMAP.md`
 
-You are the lead engineer for EDEN.
+## The Cardinal Rule:
+> **"Unlimited Imagination, Logical Execution"**
+> Characters can imagine, invent, and propose any creation without being bound to fixed catalogs, but they cannot magically spawn objects. Every world modification must be governed by causality, knowledge, resources, tools, and executable construction steps validated by the simulation engine.
 
-Read:
+## Agent Skills Available
 
-- .agents/AGENTS.md
-- docs/GAME_DESIGN.md
-- docs/ARCHITECTURE.md
-- docs/ROADMAP.md
+The repository provides 18 specialist skills under `.agents/skills/`:
+- **Orchestration**: `eden-orchestrator`, `eden-game-foundation`, `observer-ui`
+- **AI & Behavior**: `gemini-agent-engineering`, `autonomous-agent-behavior`, `memory-systems`
+- **Causality & Creation**: `causality-engine`, `creative-engine`, `world-provenance`, `knowledge-and-learning`
+- **Pixel Art Pipeline**: `phaser-pixel-art`, `pixel-art-generation`
+- **Firebase Persistence**: `firebase-world-database`, `firebase-asset-persistence`
+- **Simulation & QA**: `simulation-systems`, `quality-gates`, `security-and-secrets`, `test-ai-simulation`
 
-Read the relevant specialist skills before implementation.
+## Development Workflows
 
-First inspect the workspace and report what exists.
+Execute standard workflows under `.agents/workflows/`:
+- `/plan-feature`
+- `/implement-simulation-system`
+- `/implement-ai-character`
+- `/create-world-object`
+- `/create-pixel-art-asset`
+- `/execute-construction-project`
+- `/test-causality`
+- `/test-autonomous-behavior`
+- `/test-memory-and-knowledge`
+- `/test-persistence`
+- `/review-architecture`
+- `/release-check`
 
-Then create a concise implementation plan for Phase 1 only.
+## Verification Checks
 
-Implement Phase 1:
-
-- Playable true top-down 2D pixel-art world.
-- Tile-based map.
-- Two placeholder characters: Naufal and Lauren.
-- Four-direction movement.
-- Character collision.
-- Camera pan and zoom.
-- Observer HUD.
-- World clock.
-- Character information panels.
-
-Use:
-
-- eden-game-foundation
-- phaser-pixel-art
-- observer-ui
-- quality-gates
-
-Do not implement Gemini behavior yet.
-
-Do not fake AI.
-Do not create scripted conversations.
-Do not create fake memories.
-
-Keep game simulation independent from React UI.
-
-Run:
-
-- TypeScript checks
-- Lint
-- Tests
-- Browser verification if available
-
-Update docs/ROADMAP.md with actual status and known limitations.
-
-Do not claim anything passed unless you actually ran it.
-
-Do not just generate a plan. Actually implement Phase 1.
-
----
-
-## Recommended Development Sequence
-
-1. /plan-phase
-2. /implement-phase
-3. /implement-ai-agents
-4. /test-simulation
-5. /review-changes
-6. /release-check
-
-## Setup Notes
-
-- Start with Phase 1.
-- Do not make live Gemini calls during Phase 1.
-- Use Node.js LTS.
-- Use npm.
-- Keep GEMINI_API_KEY server-side only.
-- Configure GEMINI_MODEL using a currently supported Gemini model.
-- Verify official documentation before implementing SDK-specific APIs.
+Always run quality checks before completing changes:
+```bash
+npm run typecheck
+npm run lint
+npm test
+npm run build
+```
+Update `docs/ROADMAP.md` with honest test results and current progress.

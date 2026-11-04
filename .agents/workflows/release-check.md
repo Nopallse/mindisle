@@ -1,40 +1,31 @@
----
-description: Verify EDEN release readiness, environment configuration, build, tests, security boundaries, and documentation.
----
+# Mindisle Workflow: Release Check
 
-Read `.agents/AGENTS.md`.
+Run this workflow prior to tagging a phase release or delivering a milestone.
 
-Load:
+## Release Checklist
 
-- quality-gates
-- security-and-secrets
+1. **Clean Code & Type Check**:
+   ```bash
+   npm run typecheck
+   npm run lint
+   ```
+   Must exit with 0 errors and 0 warnings.
 
-Verify required environment variables are documented but not committed.
+2. **Automated Test Suite**:
+   ```bash
+   npm test
+   ```
+   All unit, scenario, and causality tests must pass. Never claim unrun tests passed.
 
-Run available:
+3. **Production Build**:
+   ```bash
+   npm run build
+   ```
+   Next.js App Router must compile all routes cleanly.
 
-- TypeScript checks.
-- Lint.
-- Unit tests.
-- Integration tests.
-- Production build.
-- Browser smoke tests.
+4. **Security Audit**:
+   - Check that `.env.local` is in `.gitignore`.
+   - Verify zero client-side leaks of `GEMINI_API_KEY` or `FIREBASE_ADMIN_PRIVATE_KEY`.
 
-Verify:
-
-- No Gemini API key is exposed in client bundles.
-- Database migrations are safe.
-- Persistence works.
-- Current phase acceptance criteria are satisfied.
-- Documentation is updated.
-
-Do not deploy without explicit user approval.
-
-Do not perform destructive database operations without explicit approval.
-
-Report all checks using:
-
-- PASS
-- FAIL
-- NOT RUN
-
+5. **Roadmap & Acceptance Update**:
+   - Update `docs/ROADMAP.md` and `docs/PHASE_ACCEPTANCE.md` with honest outcomes and verified acceptance criteria.

@@ -1,98 +1,41 @@
 ---
 name: autonomous-agent-behavior
-description: Designs and implements believable autonomous character behavior, personality, needs, emotions, goals, perception, action selection, and social dynamics for EDEN.
+description: Designs and implements believable autonomous character behavior, personality, needs, emotions, motivations, goals, perception, action selection, learning from failure, and social dynamics for Mindisle.
 ---
 
 # Autonomous Agent Behavior
 
-## Responsibilities
+Responsible for creating believable, evolving character autonomy that reflects distinct personalities, motivations, and natural behavior.
 
-Build believable autonomous behavior.
+## Core Principles
 
-## Principles
+- **Personality is a Tendency, Not a Script**: Naufal tends toward exploration, tinkering, and physical experimentation; Lauren tends toward observation, botany, reflection, and quiet craft. Neither is locked to rigid canned responses.
+- **Needs Drive Motivations**: Physical, cognitive, and social needs (energy, curiosity, comfort, companionship) create motivations to act, rest, explore, or build.
+- **Inspiration from the World**: Characters form creative ideas when their active motivations cross paths with observed world objects, materials, and landmarks.
+- **Learning from Failure**: When an action or construction fails (due to missing tools, inadequate knowledge, or bad weather), characters experience realistic consequences (frustration, fatigue) and form grounded memories to adapt their next plan.
+- **Simulated Emotion Disclaimer**: Emotion state variables (valence, arousal, dominance) are deterministic psychological appraisal values, never labeled as genuine biological consciousness.
 
-- Personality is a tendency, not a script.
-- Needs influence decision priorities.
-- Goals influence action selection.
-- Emotions are simulated appraisal variables.
-- Behavior must be grounded in perception.
-- Agents may choose idle.
-- Failed actions must trigger reconsideration.
-- Avoid repetitive conversations.
-- Avoid endless wandering.
+## Character Profiles
 
-## Decision Architecture
+### Naufal
+- **Archetype**: Pragmatic Explorer & Tinkerer.
+- **Tendencies**: High curiosity, active exploration, physical construction experimentation, direct communication.
+- **Default Motivations**: Understanding how things work, exploring uncharted tiles, crafting functional tools and sturdy shelter.
 
-Use a hybrid approach.
+### Lauren
+- **Archetype**: Thoughtful Botanist & Storyteller.
+- **Tendencies**: Deep observation, empathy, careful reflection before action, aesthetic appreciation of nature.
+- **Default Motivations**: Categorizing plant species, studying the lake ecosystem, crafting comfortable resting spaces and expressive decorations.
 
-Deterministic systems calculate:
+## Decision & Behavior Loop
 
-- Distances.
-- Visibility.
-- Needs.
-- Environmental constraints.
-- Available actions.
+1. **Perception**: Filter world state to within vision and hearing ranges.
+2. **Needs Update**: Advance deterministic physiological decay (energy, hunger, curiosity).
+3. **Motivation Appraisal**: Determine primary active urge.
+4. **Memory & Knowledge Recall**: Retrieve relevant experiences, known material properties, and beliefs.
+5. **Reasoning & Planning**: Invoke Gemini when a non-trivial goal or creative idea arises; decompose goal into causal steps.
+6. **Execution & Consequence**: Execute verified action step; record physical results and update emotional state.
 
-Gemini reasons about:
+## Dependencies
 
-- Social decisions.
-- Exploration.
-- Goal selection.
-- Ambiguous situations.
-- Contextual responses.
-
-The deterministic policy layer validates every action.
-
-## Character State
-
-Separate stable and mutable data.
-
-Stable:
-
-- Identity.
-- Personality.
-- Initial traits.
-
-Mutable:
-
-- Needs.
-- Emotional appraisal.
-- Goals.
-- Relationships.
-- Current activity.
-
-Episodic:
-
-- Observations.
-- Experiences.
-- Conversations.
-
-Private:
-
-- Internal thoughts.
-- Private memories.
-
-## Behavior Loop
-
-1. Observe environment.
-2. Update needs.
-3. Evaluate goals.
-4. Retrieve relevant memories.
-5. Ask Gemini when triggered.
-6. Validate decision.
-7. Execute action.
-8. Record actual outcome.
-9. Update state.
-
-## Quality Checks
-
-Test that Naufal and Lauren:
-
-- Show different behavioral tendencies.
-- Can initiate activities.
-- Can change goals.
-- Recover from failed actions.
-- Avoid endless loops.
-- Do not know hidden information.
-
-Do not make either character completely predictable.
+- Coordinates with: `causality-engine`, `creative-engine`, `memory-systems`, `knowledge-and-learning`, `simulation-systems`.

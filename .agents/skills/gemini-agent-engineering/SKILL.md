@@ -1,107 +1,33 @@
 ---
 name: gemini-agent-engineering
-description: Implements EDEN's Gemini-powered autonomous character brains, prompts, structured outputs, function calling, server-side SDK integration, and decision orchestration.
+description: Implements Mindisle's Gemini-powered autonomous character brains, prompts, structured outputs, function calling, server-side @google/genai SDK integration, creative proposals, and decision orchestration.
 ---
 
 # Gemini Agent Engineering
 
+Responsible for the AI brain, reasoning loop, creative ideation, and structured proposals for autonomous characters.
+
+Google Gemini API is the sole LLM reasoning provider. Do not integrate OpenAI, Anthropic, or other third-party LLMs.
+
 ## Responsibilities
 
-Build the AI Brain for Naufal and Lauren.
+- Server-side Gemini API client integration using the official `@google/genai` JavaScript SDK.
+- Character-specific prompt construction and private epistemic context bounding.
+- Structured output enforcement via versioned Zod schemas.
+- Distinguishing **Creative Reasoning** (inventing ideas, proposing design specs) from **Physical Action Selection** (`MOVE`, `GATHER`, `CONSTRUCT`, `SPEAK`).
+- Robust handling of latency, timeouts, rate limits, and deterministic safe fallbacks.
+- Recording usage telemetry (latency, tokens, model ID, status).
 
-Gemini is the ONLY LLM provider.
+## Architectural Rules
 
-Use:
+1. **Server-Side Only**: `GEMINI_API_KEY` and client instances must never be imported into React client components or Phaser scenes.
+2. **Untrusted Proposer**: Gemini is a proposal generator. The Causality Engine and simulation engine have authoritative veto power over every action.
+3. **No Direct World Mutation**: Gemini cannot declare that an object has appeared, that materials have materialized, or that a character has teleported. It proposes *intentions*.
+4. **Separate Reasoning from Image Generation**: Text/reasoning models and image-generation models have distinct endpoints and capabilities. Do not assume all Gemini models output images directly.
+5. **No Per-Frame Invocations**: Trigger decisions via event bus subscriptions, schedule intervals, or when an action finishes.
+6. **Strict Isolation**: Naufal and Lauren receive strictly isolated system instructions, private perceptions, private memories, and private beliefs.
+7. **Mockable in Tests**: All Gemini API calls must be wrapped in an interface allowing deterministic mocking in automated test suites (Scenarios A through H).
 
-- Google Gemini API.
-- Official @google/genai SDK.
-- Structured output.
-- Function calling where appropriate.
+## Dependencies
 
-Do not integrate:
-
-- OpenAI.
-- Anthropic.
-- Claude.
-- Other LLM providers.
-
-## Security
-
-- API key must be server-side.
-- Use GEMINI_API_KEY.
-- Use GEMINI_MODEL for model selection.
-- Never expose credentials to Phaser or browser code.
-
-## Agent Isolation
-
-Create independent configurations for Naufal and Lauren.
-
-Each character has:
-
-- System instructions.
-- Personality.
-- Goals.
-- Private memory.
-- Current state.
-- Decision history.
-
-Never share private thoughts or memories.
-
-## Decision Pipeline
-
-1. Build perception context.
-2. Retrieve relevant memories.
-3. Construct bounded prompt.
-4. Send request to Gemini.
-5. Receive structured output.
-6. Validate using Zod.
-7. Validate world action.
-8. Execute accepted action.
-9. Record actual result.
-10. Update memory.
-
-## Prompt Engineering
-
-Each decision should:
-
-- Consider personality.
-- Consider current needs.
-- Consider active goals.
-- Use available observations.
-- Use relevant memories.
-- Select one immediate action.
-- Avoid repetitive behavior.
-- Avoid inventing facts.
-
-Internal thought must be separated from public dialogue.
-
-## Reliability
-
-Implement:
-
-- Request timeout.
-- Bounded retries.
-- Exponential backoff for transient errors.
-- Request IDs.
-- Stale-result rejection.
-- Per-character cooldown.
-- Safe fallback.
-
-Do not call Gemini every frame.
-
-## Testing
-
-Test:
-
-- Valid output.
-- Invalid JSON.
-- Unsupported action.
-- Out-of-range target.
-- Timeout.
-- Rate limit.
-- Stale response.
-- Private memory leakage.
-
-Mock Gemini responses during ordinary tests.
-
-Live Gemini tests must be optional.
+- Coordinates with: `causality-engine`, `creative-engine`, `memory-systems`, `autonomous-agent-behavior`, `security-and-secrets`.

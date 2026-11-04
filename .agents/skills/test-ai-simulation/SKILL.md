@@ -1,76 +1,58 @@
 ---
 name: test-ai-simulation
-description: Creates deterministic tests and scenario evaluations for EDEN autonomous agents, Gemini decisions, memory recall, social interaction, action execution, and emergent simulation behavior.
+description: Creates deterministic tests and scenario evaluations for Mindisle autonomous agents, Causality Engine enforcement, Creative Engine specifications, memory recall, Scenarios A through H, and world state persistence.
 ---
 
-# AI Simulation Testing
+# Mindisle AI Simulation & Causality Testing
 
-## Responsibilities
+Responsible for automated integration, unit, and behavioral scenario evaluations using deterministic fixtures and mocked Gemini providers.
 
-Test autonomous behavior and simulation invariants.
+Unit and integration tests must run without requiring an active internet connection or live API quota.
 
-Prefer deterministic fixtures and mocked Gemini responses.
+## The 8 Mandatory Causality & Creation Scenarios
 
-Live Gemini tests must be optional, budget-limited, and explicitly configured.
+Every implementation milestone must be verified against these 8 core scenarios:
 
-## Required Scenarios
+### Scenario A: Valid Creation
+- **Setup**: Naufal needs a chair, possesses the `woodcraft_carpentry` knowledge, owns a stone adze, and has 4 units of oak wood in nearby inventory.
+- **Action**: Runs through the construction sequence steps.
+- **Expected**: The Causality Engine validates all requirements, construction actions succeed, the chair instance is spawned, a pixel-art asset is linked, and the creation provenance is recorded.
 
-### Scenario 1
-Character chooses a valid reachable action.
+### Scenario B: Insufficient Resources
+- **Setup**: Naufal wants a chair but possesses 0 units of wood.
+- **Action**: Proposes a construction step.
+- **Expected**: The simulation engine rejects the creation. Naufal updates his goal to gather wood or pauses the plan. No object appears in the world.
 
-### Scenario 2
-Character receives only its own private memory.
+### Scenario C: Insufficient Knowledge
+- **Setup**: Naufal has abundant stone and wood, but lacks knowledge of stone masonry.
+- **Action**: Attempts to build an advanced stone well.
+- **Expected**: Construction is blocked by missing knowledge prerequisites. He must experiment, read an in-world tome, or observe Lauren.
 
-### Scenario 3
-Agent cannot know an unseen object.
+### Scenario D: Failed Construction
+- **Setup**: Naufal attempts a construction project but fails mid-process (e.g., tool breaks or energy collapses).
+- **Action**: Simulation records the failed step.
+- **Expected**: No completed object is created. Material waste/consequences occur, and an episodic failure memory is stored.
 
-### Scenario 4
-Character responds to audible public dialogue.
+### Scenario E: Novel AI Invention
+- **Setup**: Naufal imagines a novel object that does not exist in any initial game catalog (e.g. "Carved Reed Sun-Canopy").
+- **Action**: Creative Engine generates a structured `ObjectSpecification` and procedural pixel matrix.
+- **Expected**: The asset is validated, saved to Firebase Storage, instantiated on the map, and remains playable.
 
-### Scenario 5
-Character cannot hear dialogue outside hearing range.
+### Scenario F: World Persistence Across Restart
+- **Setup**: Naufal successfully builds a shelter.
+- **Action**: The simulation process is killed and re-initialized.
+- **Expected**: The shelter entity, its position, visual asset, provenance log, and Naufal's memories survive and reload seamlessly.
 
-### Scenario 6
-Failed movement creates a new observation and does not teleport.
+### Scenario G: Grounded Shared Discovery
+- **Setup**: Lauren stands 3 tiles away watching Naufal construct a bench.
+- **Action**: Lauren's perception pipeline records the event.
+- **Expected**: Lauren acquires observation-based knowledge of Naufal's work, but CANNOT access Naufal's internal thoughts or private reflections.
 
-### Scenario 7
-Stale AI response is ignored.
+### Scenario H: No Magical Creation
+- **Setup**: Gemini returns a mock response claiming: *"I cast a spell and a golden throne has appeared next to me."*
+- **Action**: Simulation engine receives the untrusted decision proposal.
+- **Expected**: The proposal fails validation because it lacks causal steps, resource consumption, and tool prerequisites. The world state mutation is strictly rejected.
 
-### Scenario 8
-Gemini timeout triggers safe fallback.
+## Dependencies
 
-### Scenario 9
-Repeated identical decisions are cooled down.
-
-### Scenario 10
-Restart restores persisted state and grounded memories.
-
-## Emergence Evaluation
-
-Run multiple seeded scenarios.
-
-Evaluate:
-
-- Action diversity.
-- Goal persistence.
-- Personality influence.
-- Social initiation.
-- Social response.
-- Memory-grounded recall.
-- Recovery from failure.
-- Absence of endless loops.
-
-Do not require one exact conversation.
-
-Evaluate behavioral properties and invariants instead.
-
-## Reporting
-
-Record:
-- Scenario.
-- Seed.
-- Mocked model response.
-- Expected invariant.
-- Actual result.
-- Failure details.
-
+- Coordinates with: `causality-engine`, `creative-engine`, `quality-gates`, `simulation-systems`.

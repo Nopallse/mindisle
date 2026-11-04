@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'EDEN — AI Living World',
+  title: 'Mindisle — AI Living World',
   description:
     'A persistent top-down pixel-art simulation inhabited by autonomous AI characters.',
 };
